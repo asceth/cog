@@ -91,6 +91,7 @@ defmodule Cog.Test.Support.ProviderCase do
   end
 
   defp provider_for(:slack), do: Cog.Chat.Slack.Provider
+  defp provider_for(:mattermost), do: Cog.Chat.Mattermost.Provider
   defp provider_for(:hipchat), do: Cog.Chat.HipChat.Provider
   defp provider_for(:test), do: Cog.Chat.Test.Provider
   defp provider_for(other),
@@ -119,6 +120,7 @@ defmodule Cog.Test.Support.ProviderCase do
   end
 
   defp client_for_provider(:slack), do: Cog.Test.Support.SlackClient
+  defp client_for_provider(:mattermost), do: Cog.Test.Support.MattermostClient
   defp client_for_provider(:hipchat), do: Cog.Test.Support.HipChatClient
   defp client_for_provider(_), do: nil
 

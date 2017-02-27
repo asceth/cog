@@ -3,7 +3,8 @@ defmodule Cog.Config.Helpers do
 
   # List of available chat providers. Only one can be enabled at a time.
   @chat_providers [slack: Cog.Chat.Slack.Provider,
-                   hipchat: Cog.Chat.HipChat.Provider]
+                   hipchat: Cog.Chat.HipChat.Provider,
+                   mattermost: Cog.Chat.Mattermost.Provider]
   # Other providers. These are all enabled.
   @other_providers [http: Cog.Chat.Http.Provider]
 

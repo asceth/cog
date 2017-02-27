@@ -216,6 +216,7 @@ config :cog, :email_from, System.get_env("COG_EMAIL_FROM")
 config :cog, :password_reset_base_url, System.get_env("COG_PASSWORD_RESET_BASE_URL")
 
 import_config "slack.exs"
+import_config "mattermost.exs"
 import_config "hipchat.exs"
 
 import_config "#{Mix.env}.exs"

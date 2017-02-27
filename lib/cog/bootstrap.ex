@@ -90,7 +90,7 @@ defmodule Cog.Bootstrap do
   back.
   """
   def maybe_bootstrap do
-    unless is_bootstrapped? do
+    unless is_bootstrapped?() do
       result = Repo.transaction fn ->
         case bootstrap_from_env do
           {:ok, user} ->

@@ -4,6 +4,7 @@ defmodule Cog.TemplateCase do
   alias Cog.Template
   alias Greenbar.Renderers.SlackRenderer
   alias Greenbar.Renderers.HipChatRenderer
+  alias Greenbar.Renderers.MattermostRenderer
 
   using do
     quote do
@@ -16,6 +17,7 @@ defmodule Cog.TemplateCase do
         |> Enum.reduce_while(nil, fn
                                ("hipchat", nil) -> {:halt, :hipchat}
                                ("slack", nil) -> {:halt, :slack}
+                               ("mattermost", nil) -> {:halt, :mattermost}
                                (_, nil) -> {:cont, nil}
         end)
 
@@ -38,6 +40,27 @@ defmodule Cog.TemplateCase do
   def assert_rendered_template(:slack, bundle, template_name, data, {text, attachments}) do
     directives = directives_for_template(bundle, template_name, data)
     {message, rendered} = SlackRenderer.render(directives)
+    assert text == message
+    cond do
+      is_binary(attachments) ->
+        assert attachments == Enum.at(rendered, 0) |> Map.get("text")
+      length(attachments) == 0 ->
+        assert attachments == rendered
+      attachments ->
+        attachments
+        |> Enum.with_index
+        |> Enum.each(fn({attachment, index}) -> assert attachment == Enum.at(rendered, index) |> Map.get("text") end)
+    end
+  end
+
+  def assert_rendered_template(:mattermost, bundle, template_name, data, expected) when is_binary(expected) do
+    directives = directives_for_template(bundle, template_name, data)
+    {rendered, _} = MattermostRenderer.render(directives)
+    assert expected == rendered
+  end
+  def assert_rendered_template(:mattermost, bundle, template_name, data, {text, attachments}) do
+    directives = directives_for_template(bundle, template_name, data)
+    {message, rendered} = MattermostRenderer.render(directives)
     assert text == message
     cond do
       is_binary(attachments) ->
